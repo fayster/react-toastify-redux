@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "lib",
+    "allowSyntheticDefaultImports": true,
+    "module": "es6",
+    "target": "es6",
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "lib": [
+      "es2015"
+    ],
+    "declaration": true
+  },
+  "include": [
+    "src/index.ts",
+    "externals.d.ts"
+  ]
+}
