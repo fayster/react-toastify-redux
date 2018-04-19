@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'production',
@@ -21,7 +22,13 @@ module.exports = {
   },
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.js', '.jsx', '.tsx', '.ts']
+    extensions: ['.js', '.jsx', '.tsx', '.ts'],
+    alias: {
+      react: path.resolve('./node_modules/react'),
+      'react-dom': path.resolve('./node_modules/react-dom'),
+      'react-toasify': path.resolve('./node_modules/react-toastify'),
+      'react-redux': path.resolve('./node_modules/react-redux')
+    }
   },
   externals: [
     'react',

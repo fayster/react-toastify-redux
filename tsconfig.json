@@ -9,8 +9,7 @@
     "moduleResolution": "node",
     "lib": [
       "es2015"
-    ],
-    "declaration": true
+    ]
   },
   "include": [
     "src/index.ts",

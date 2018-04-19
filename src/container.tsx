@@ -1,13 +1,17 @@
-import React from 'react';
-import {toast, ToastContainer} from 'react-toastify';
+import React, {ComponentClass, SFC} from 'react';
+import {toast, ToastContainer as ReactToastContainer, ToastContainerProps} from 'react-toastify';
 import {connect} from "react-redux";
 import compare from './utils/compare';
 import {dismiss} from "./actions";
-import {Toast, StateProps, DispatchProps, ToastIds, OwnProps} from './interfaces';
+import {Toast} from './definitions';
+
+interface ToastIds {
+  [storageToastId: string]: number;
+}
 
 type ToasterContainerProps = OwnProps & StateProps & DispatchProps;
 
-class ToasterContainer extends React.Component<ToasterContainerProps> {
+class ToastContainer extends React.Component<ToasterContainerProps> {
   private _toastIds: ToastIds = {};
 
   onCloseHandler = (storageToastId: string) => {
@@ -62,17 +66,29 @@ class ToasterContainer extends React.Component<ToasterContainerProps> {
     const {dismiss, toastList, toastComponent, ...rest} = this.props;
 
     return (
-      <ToastContainer {...rest} />
+      <ReactToastContainer {...rest} />
     );
   }
+}
+
+export interface OwnProps extends ToastContainerProps {
+  toastComponent?: SFC<Toast> | ComponentClass<Toast> | string;
+}
+
+export interface StateProps {
+  toastList: Toast[];
 }
 
 const mapStateToProps = (state): StateProps => ({
   toastList: state.toasts
 });
 
+export interface DispatchProps {
+  dismiss(id: string): void;
+}
+
 const mapDispatchToProps = (dispatch): DispatchProps => ({
   dismiss: (id) => dispatch(dismiss(id))
 });
 
-export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ToasterContainer);
+export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ToastContainer);

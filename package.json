@@ -3,11 +3,12 @@
   "version": "1.0.0-rc.1",
   "description": "react-toastify with Redux",
   "main": "lib/index.js",
+  "typings": "src/definitions.d.ts",
   "scripts": {
     "build": "npm run build:umd && npm run build:lib",
     "build:umd": "npm run clean:umd && cross-env NODE_ENV=production webpack",
     "build:lib": "npm run clean:lib && cross-env NODE_ENV=production tsc",
-    "postbuild:lib": "cross-env NODE_ENV=production babel lib --out-dir lib",
+    "postbuild:lib": "cross-env NODE_ENV=production babel lib --out-dir lib && rimraf lib/container.jsx",
     "clean:umd": "rimraf dist/*",
     "clean:lib": "rimraf lib/*"
   },
@@ -21,7 +22,7 @@
     "notification",
     "react-toastify"
   ],
-  "author": "fayster",
+  "author": "fayster <fayster91@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fayster/react-toastify-redux/issues"
@@ -42,8 +43,8 @@
     "webpack-cli": "^2.0.14"
   },
   "peerDependencies": {
-    "react": "^15.0.0",
-    "react-dom": "^15.0.0",
-    "react-toastify": "^4.0.0-rc.4"
+    "react": ">=15.0.0",
+    "react-dom": ">=15.0.0",
+    "react-toastify": ">=4.0.0-rc.4"
   }
 }

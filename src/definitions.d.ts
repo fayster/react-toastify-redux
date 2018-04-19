@@ -1,4 +1,5 @@
-import {ToastContainerProps, ToastType} from "react-toastify";
+import React from 'react';
+import {ToastType, ToastContainerProps as ReactToastContainerProps} from "react-toastify";
 import {ComponentClass, SFC} from "react";
 
 export interface ToastBaseOptions {
@@ -83,24 +84,13 @@ export interface ToastId {
   id?: string;
 }
 
-export interface ToastMessage {
-  /**
-   * Toast message
-   */
-  message: string;
-}
-
-export type Toast = ToastId & ToastMessage & ToastBaseOptions;
-
-export interface Action<T> {
+export interface ToastAction<T> {
   /**
    * Action type
    */
   type: string;
   payload: T;
 }
-
-export type ToastOptions = ToastId & ToastBaseOptions;
 
 export interface DismissActionPayload {
   /**
@@ -113,18 +103,26 @@ export interface UpdateActionPayload extends DismissActionPayload {
   options: ToastBaseOptions & ToastMessage;
 }
 
-export interface StateProps {
-  toastList: Toast[];
+export interface ToastMessage {
+  /**
+   * Toast message
+   */
+  message: string;
 }
 
-export interface DispatchProps {
-  dismiss(id: string): void;
-}
-
-export interface OwnProps extends ToastContainerProps {
+export interface ToastContainerProps {
   toastComponent?: SFC<Toast> | ComponentClass<Toast> | string;
 }
 
-export interface ToastIds {
-  [storageToastId: string]: number;
-}
+export type Toast = ToastId & ToastMessage & ToastBaseOptions;
+export type ToastOptions = ToastId & ToastBaseOptions;
+
+export const toastsReducer: (toastList: Toast[], action: ToastAction<any>) => Toast[];
+export class ToastContainer extends React.Component<ReactToastContainerProps & ToastContainerProps> {}
+export const dismiss: (id?: string) => ToastAction<DismissActionPayload>;
+export const update: (id: string, options: ToastBaseOptions & ToastMessage) => ToastAction<UpdateActionPayload>;
+export const error: (message: string, options?: ToastOptions) => ToastAction<Toast>;
+export const warning: (message: string, options?: ToastOptions) => ToastAction<Toast>;
+export const info: (message: string, options?: ToastOptions) => ToastAction<Toast>;
+export const message: (message: string, options?: ToastOptions) => ToastAction<Toast>;
+export const success: (message: string, options?: ToastOptions) => ToastAction<Toast>;
