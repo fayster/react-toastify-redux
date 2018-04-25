@@ -1,94 +1,154 @@
 import React, {ComponentClass, SFC} from 'react';
-import {toast, ToastContainer as ReactToastContainer, ToastContainerProps} from 'react-toastify';
+import {toast, ToastContainer as ReactToastContainer, ToastContainerProps, ToastOptions} from 'react-toastify';
 import {connect} from "react-redux";
 import compare from './utils/compare';
 import {dismiss} from "./actions";
-import {Toast} from './definitions';
+import {Toast, ToastComponentAdditionalProps} from './definitions';
 
 interface ToastIds {
-  [storageToastId: string]: number;
+	[storageToastId: string]: number;
 }
 
 type ToasterContainerProps = OwnProps & StateProps & DispatchProps;
 
-class ToastContainer extends React.Component<ToasterContainerProps> {
-  private _toastIds: ToastIds = {};
+export class ToastContainer extends React.Component<ToasterContainerProps> {
+	private _toastIds: ToastIds = {};
 
-  onCloseHandler = (storageToastId: string) => {
-    const {[storageToastId]: _toastId, ...toastIds} = this._toastIds;
-    this._toastIds = toastIds;
+	private getCustomComponentProps = (toastItem: Toast): ToastComponentAdditionalProps => {
+		const {id, message, title} = toastItem;
 
-    toast.dismiss(_toastId);
-    this.props.dismiss(storageToastId);
-  };
+		return {
+			id,
+			message,
+			title
+		};
+	};
 
-  componentWillReceiveProps(nextProps: ToasterContainerProps) {
-    nextProps.toastList.forEach((toastItem: Toast) => {
-      // new toast
-      if (!(toastItem.id in this._toastIds)) {
-        this._toastIds[toastItem.id] = (nextProps.toastComponent && !toastItem.renderDefaultComponent)
-          ? toast(React.createElement(nextProps.toastComponent, toastItem), {
-              type: toastItem.type,
-              onClose: () => this.onCloseHandler(toastItem.id)
-            })
-          : toast(toastItem.message, {
-              type: toastItem.type,
-              onClose: () => this.onCloseHandler(toastItem.id)
-            });
-      }
+	private getToastOptions = (toastItem: Toast): ToastOptions => {
+		const {
+			id,
+			type,
+			pauseOnHover,
+			closeOnClick,
+			autoClose,
+			position,
+			progressClassName,
+			className,
+			bodyClassName,
+			hideProgressBar,
+			draggable,
+			draggablePercent
+		} = toastItem;
 
-      // update toast
-      const fountToast = this.props.toastList.find(toast => toast.id === toastItem.id);
-      if (fountToast && !compare(toastItem, fountToast)) {
-        toast.update(this._toastIds[toastItem.id], {
-          type: toastItem.type,
-          render: (nextProps.toastComponent && !toastItem.renderDefaultComponent)
-            ? React.createElement(nextProps.toastComponent, toastItem)
-            : undefined
-        });
-      }
-    });
+		return {
+			onClose: () => this.onCloseHandler(id),
+			type,
+			pauseOnHover,
+			closeOnClick,
+			autoClose,
+			position,
+			progressClassName,
+			className,
+			bodyClassName,
+			hideProgressBar,
+			draggable,
+			draggablePercent
+		};
+	};
 
-    // delete toast
-    this.props.toastList
-      .filter((toastItem: Toast) => {
-        const foundItem = nextProps.toastList.find(nextToastItem => nextToastItem.id === toastItem.id);
-        return !foundItem && toastItem.id in this._toastIds;
-      })
-      .forEach((doomedToast) => this.onCloseHandler(doomedToast.id));
-  }
+	private renderToasts = (nextProps: ToasterContainerProps) => {
+		nextProps.toastList.forEach((toastItem: Toast) => {
+			const {renderDefaultComponent=false} = toastItem;
 
-  shouldComponentUpdate(nextProps: ToasterContainerProps) {
-    return this.props !== nextProps;
-  }
+			// new toast
+			if (!(toastItem.id in this._toastIds)) {
+				this._toastIds[toastItem.id] = (nextProps.toastComponent && !renderDefaultComponent)
+					? toast(React.createElement(
+							nextProps.toastComponent,
+							this.getCustomComponentProps(toastItem)),
+							this.getToastOptions(toastItem)
+						)
+					: toast(toastItem.message, this.getToastOptions(toastItem));
+			}
 
-  render() {
-    const {dismiss, toastList, toastComponent, ...rest} = this.props;
+			// update toast
+			const foundToast = this.props.toastList.find(toast => toast.id === toastItem.id);
+			if (foundToast && (!compare(toastItem, foundToast) || nextProps.toastComponent !== this.props.toastComponent)) {
+				toast.update(this._toastIds[toastItem.id], {
+					...this.getToastOptions(toastItem),
+					render: (nextProps.toastComponent && !renderDefaultComponent)
+						? React.createElement(nextProps.toastComponent, this.getCustomComponentProps(toastItem))
+						: toastItem.message
+				});
+			}
+		});
 
-    return (
-      <ReactToastContainer {...rest} />
-    );
-  }
+		// delete toast
+		this.props.toastList
+			.filter((toastItem: Toast) => {
+				const foundItem = nextProps.toastList.find(nextToastItem => nextToastItem.id === toastItem.id);
+				return !foundItem && toastItem.id in this._toastIds;
+			})
+			.forEach((doomedToast) => this.closeToast(doomedToast.id));
+	};
+
+	private closeToast = (storageToastId: string) => {
+		/* istanbul ignore next */
+		const {[storageToastId]: _toastId, ...toastIds} = this._toastIds;
+		this._toastIds = toastIds;
+
+		toast.dismiss(_toastId);
+	};
+
+	private onCloseHandler = (storageToastId: string) => {
+		this.closeToast(storageToastId);
+		this.props.dismiss(storageToastId);
+	};
+
+	public componentDidMount() {
+		this.renderToasts(this.props);
+	}
+
+	public componentWillUnmount() {
+		this.props.dismiss();
+		this._toastIds = {};
+	}
+
+	public componentWillReceiveProps(nextProps: ToasterContainerProps) {
+		this.renderToasts(nextProps);
+	}
+
+	public shouldComponentUpdate(nextProps: ToasterContainerProps) {
+		return this.props !== nextProps;
+	}
+
+	public render() {
+		const {dismiss, toastList, toastComponent, ...rest} = this.props;
+
+		return (
+			<ReactToastContainer {...rest} />
+		);
+	}
 }
 
 export interface OwnProps extends ToastContainerProps {
-  toastComponent?: SFC<Toast> | ComponentClass<Toast> | string;
+	toastComponent?: SFC<Toast> | ComponentClass<Toast> | string;
 }
 
 export interface StateProps {
-  toastList: Toast[];
+	toastList: Toast[];
 }
 
 const mapStateToProps = (state): StateProps => ({
-  toastList: state.toasts
+	toastList: state.toasts
 });
 
 export interface DispatchProps {
-  dismiss(id: string): void;
+	dismiss(id?: string): void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchProps => ({
-  dismiss: (id) => dispatch(dismiss(id))
+	dismiss: (id) => dispatch(dismiss(id))
 });
 
 export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ToastContainer);

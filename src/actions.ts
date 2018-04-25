@@ -2,11 +2,11 @@ import * as types from './types';
 import {toast, ToastType} from "react-toastify";
 import uniqueId from './utils/uniqueId';
 import {
-  ToastAction, DismissActionPayload, Toast, ToastBaseOptions, ToastMessage, ToastOptions, UpdateActionPayload
+  ToastAction, DismissActionPayload, Toast, ToastOptions, UpdateActionOptions, UpdateActionPayload
 } from './definitions';
 
 export const toastActionCreator = (type: ToastType) => {
-  return (message: string, options: ToastOptions = {}): ToastAction<Toast> => ({
+  return (message: any, options: ToastOptions = {}): ToastAction<Toast> => ({
     type: types.TOAST_MESSAGE,
     payload: {
       id: options.id || uniqueId('toast'),
@@ -22,7 +22,7 @@ export const dismiss = (id?: string): ToastAction<DismissActionPayload> => ({
   payload: {id}
 });
 
-export const update = (id: string, options: ToastBaseOptions & ToastMessage): ToastAction<UpdateActionPayload> => ({
+export const update = (id: string, options: UpdateActionOptions): ToastAction<UpdateActionPayload> => ({
   type: types.TOAST_UPDATE,
   payload: {id, options}
 });

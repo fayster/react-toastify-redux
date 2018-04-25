@@ -1,10 +1,13 @@
 {
   "name": "react-toastify-redux",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "react-toastify with Redux",
   "main": "lib/index.js",
   "typings": "src/definitions.d.ts",
   "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "prebuild": "npm run test",
     "build": "npm run build:umd && npm run build:lib",
     "build:umd": "npm run clean:umd && cross-env NODE_ENV=production webpack",
     "build:lib": "npm run clean:lib && cross-env NODE_ENV=production tsc",
@@ -29,15 +32,27 @@
   },
   "homepage": "https://github.com/fayster/react-toastify-redux#readme",
   "devDependencies": {
+    "@types/jest": "^22.2.3",
     "@types/react": "^16.3.11",
     "@types/react-redux": "^5.0.16",
     "awesome-typescript-loader": "^5.0.0",
     "babel-cli": "^6.26.0",
+    "babel-jest": "^22.4.3",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react-app": "^3.0.3",
+    "coveralls": "^3.0.0",
     "cross-env": "^5.1.4",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest": "^22.4.3",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-toastify": "^4.0.0-rc.5",
+    "redux-mock-store": "^1.5.1",
     "rimraf": "^2.6.2",
+    "ts-jest": "^22.4.4",
     "typescript": "^2.8.1",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.14"
@@ -45,6 +60,25 @@
   "peerDependencies": {
     "react": ">=15.0.0",
     "react-dom": ">=15.0.0",
+    "react-redux": ">=4.4.9",
     "react-toastify": ">=4.0.0-rc.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testMatch": [
+      "**/__tests__/*.(ts|tsx)"
+    ],
+    "globals": {
+      "ts-jest": {
+        "useBabelrc": true
+      }
+    }
   }
 }

@@ -11,6 +11,12 @@ export interface ToastBaseOptions {
   renderDefaultComponent?: boolean;
 
   /**
+   * Title for custom toast component
+   * `Default: ''`
+   */
+  title?: string;
+
+  /**
    * Set the toast type.
    * `One of: 'info', 'success', 'warning', 'error', 'default'`
    */
@@ -76,14 +82,54 @@ export interface ToastBaseOptions {
   draggablePercent?: number;
 }
 
-export interface ToastId {
-  /**
-   * Unique toast id.
-   * Default: generated automatically
-   */
-  id?: string;
+/**
+ * Toast item property
+ */
+export interface Toast extends ToastBaseOptions {
+	id: string;
+	message: any;
 }
 
+/**
+ * Toast options for add toast actions
+ */
+export interface ToastOptions extends ToastBaseOptions {
+	id?: string;
+}
+
+/**
+ * Toast Container options
+ */
+export interface ToastContainerProps {
+	/**
+	 * Custom toast component
+	 * `Default: undefined`
+	 */
+	toastComponent?: SFC<Toast> | ComponentClass<Toast> | string;
+}
+
+/**
+ * Additional props for custom toast component
+ */
+export interface ToastComponentAdditionalProps {
+	id: string;
+	title: string;
+	message: any;
+}
+
+/**
+ * Props for custom toast component
+ */
+export interface ToastComponentProps extends ToastComponentAdditionalProps {
+	/**
+	 * Close toast handler
+	 */
+	closeToast(): void;
+}
+
+/**
+ * Toast action type
+ */
 export interface ToastAction<T> {
   /**
    * Action type
@@ -92,6 +138,9 @@ export interface ToastAction<T> {
   payload: T;
 }
 
+/**
+ * Dismiss action payload
+ */
 export interface DismissActionPayload {
   /**
    * Identificational number for dismiss toast
@@ -99,28 +148,28 @@ export interface DismissActionPayload {
   id: string;
 }
 
-export interface UpdateActionPayload extends DismissActionPayload {
-  options: ToastBaseOptions & ToastMessage;
+/**
+ * Update action options
+ */
+export interface UpdateActionOptions extends ToastBaseOptions {
+	message: any;
 }
 
-export interface ToastMessage {
-  /**
-   * Toast message
-   */
-  message: string;
+/**
+ * Update action payload
+ */
+export interface UpdateActionPayload {
+	/**
+	 * Identificational number for update toast
+	 */
+  id: string;
+  options: UpdateActionOptions;
 }
-
-export interface ToastContainerProps {
-  toastComponent?: SFC<Toast> | ComponentClass<Toast> | string;
-}
-
-export type Toast = ToastId & ToastMessage & ToastBaseOptions;
-export type ToastOptions = ToastId & ToastBaseOptions;
 
 export const toastsReducer: (toastList: Toast[], action: ToastAction<any>) => Toast[];
 export class ToastContainer extends React.Component<ReactToastContainerProps & ToastContainerProps> {}
 export const dismiss: (id?: string) => ToastAction<DismissActionPayload>;
-export const update: (id: string, options: ToastBaseOptions & ToastMessage) => ToastAction<UpdateActionPayload>;
+export const update: (id: string, options: UpdateActionOptions) => ToastAction<UpdateActionPayload>;
 export const error: (message: string, options?: ToastOptions) => ToastAction<Toast>;
 export const warning: (message: string, options?: ToastOptions) => ToastAction<Toast>;
 export const info: (message: string, options?: ToastOptions) => ToastAction<Toast>;
