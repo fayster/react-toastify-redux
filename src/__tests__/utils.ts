@@ -11,14 +11,14 @@ describe('compare', () => {
 	});
 
 	it('Should return false, with call not equal objects', () => {
-		const other = {...value, hello: 'world' };
+		const other = {...value, hello: 'world'};
 
 		expect(compare(value, other)).toBeFalsy();
 	});
 
 	it('Should return false, with call equal nested objects', () => {
-		const anotherValue = {...value, bar: { foo: 'foobar' }};
-		const other = {...value, bar: { foo: 'foobar' }};
+		const anotherValue = {...value, bar: {foo: 'foobar'}};
+		const other = {...value, bar: {foo: 'foobar'}};
 
 		expect(compare(anotherValue, other)).toBeFalsy();
 	});

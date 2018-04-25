@@ -1,4 +1,7 @@
-# React Toastify Redux
+# React Toastify Redux [![Build Status](https://travis-ci.org/fayster/react-toastify-redux.svg?branch=develop)](https://travis-ci.org/fayster/react-toastify-redux) [![npm version](https://badge.fury.io/js/react-toastify-redux.svg)](https://badge.fury.io/js/react-toastify-redux) [![npm](https://img.shields.io/npm/dm/react-toastify-redux.svg)](https://github.com/fayster/react-toastify-redux) [![Coverage Status](https://coveralls.io/repos/github/fayster/react-toastify-redux/badge.svg?branch=develop)](https://coveralls.io/github/fayster/react-toastify-redux?branch=master)
+
+
+
 Wraps [react-toastify](https://github.com/fkhadra/react-toastify) into a component and exposes actions and reducer.
 
 ## Installation

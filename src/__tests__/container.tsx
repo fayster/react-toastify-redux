@@ -32,7 +32,7 @@ describe('container', () => {
 
 		beforeEach(() => {
 			dismiss.mockClear();
-			wrapper = mount(<ToastContainer toastList={toastList} dismiss={dismiss} />);
+			wrapper = mount(<ToastContainer toastList={toastList} dismiss={dismiss}/>);
 		});
 
 		afterEach(() => {
@@ -209,7 +209,7 @@ describe('container', () => {
 			store = mockStore(initialState);
 			providerWrapper = mount(
 				<Provider store={store}>
-					<ConnectedToastContainer />
+					<ConnectedToastContainer/>
 				</Provider>
 			);
 		});
