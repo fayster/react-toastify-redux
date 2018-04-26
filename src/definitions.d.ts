@@ -86,45 +86,45 @@ export interface ToastBaseOptions {
  * Toast item property
  */
 export interface Toast extends ToastBaseOptions {
-	id: string;
-	message: any;
+  id: string;
+  message: any;
 }
 
 /**
  * Toast options for add toast actions
  */
 export interface ToastOptions extends ToastBaseOptions {
-	id?: string;
+  id?: string;
 }
 
 /**
  * Toast Container options
  */
 export interface ToastContainerProps {
-	/**
-	 * Custom toast component
-	 * `Default: undefined`
-	 */
-	toastComponent?: SFC<Toast> | ComponentClass<Toast> | string;
+  /**
+   * Custom toast component
+   * `Default: undefined`
+   */
+  toastComponent?: SFC<Toast> | ComponentClass<Toast> | string;
 }
 
 /**
  * Additional props for custom toast component
  */
 export interface ToastComponentAdditionalProps {
-	id: string;
-	title: string;
-	message: any;
+  id: string;
+  title: string;
+  message: any;
 }
 
 /**
  * Props for custom toast component
  */
 export interface ToastComponentProps extends ToastComponentAdditionalProps {
-	/**
-	 * Close toast handler
-	 */
-	closeToast(): void;
+  /**
+   * Close toast handler
+   */
+  closeToast(): void;
 }
 
 /**
@@ -152,22 +152,25 @@ export interface DismissActionPayload {
  * Update action options
  */
 export interface UpdateActionOptions extends ToastBaseOptions {
-	message: any;
+  message: any;
 }
 
 /**
  * Update action payload
  */
 export interface UpdateActionPayload {
-	/**
-	 * Identificational number for update toast
-	 */
+  /**
+   * Identificational number for update toast
+   */
   id: string;
   options: UpdateActionOptions;
 }
 
 export const toastsReducer: (toastList: Toast[], action: ToastAction<any>) => Toast[];
-export class ToastContainer extends React.Component<ReactToastContainerProps & ToastContainerProps> {}
+
+export class ToastContainer extends React.Component<ReactToastContainerProps & ToastContainerProps> {
+}
+
 export const dismiss: (id?: string) => ToastAction<DismissActionPayload>;
 export const update: (id: string, options: UpdateActionOptions) => ToastAction<UpdateActionPayload>;
 export const error: (message: string, options?: ToastOptions) => ToastAction<Toast>;
