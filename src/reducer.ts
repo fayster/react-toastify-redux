@@ -20,7 +20,7 @@ const handlers = {
   )
 };
 
-export default (toasts = initialState, action) => {
+export default (toasts = initialState, action: ToastAction<any>) => {
   return action.type in handlers
     ? handlers[action.type](toasts, action)
     : toasts;
