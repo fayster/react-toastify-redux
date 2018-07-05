@@ -6,7 +6,7 @@ Wraps [react-toastify](https://github.com/fkhadra/react-toastify) into a compone
 
 ## Installation
 ```
-$ npm install --save react-toasify-redux
+$ npm install --save react-toastify-redux
 $ yarn add react-toastify-redux
 ```
 
@@ -14,7 +14,7 @@ $ yarn add react-toastify-redux
 Import the reducer and pass it to your combineReducers:
 ```javascript
 import {combineReducers} from 'redux';
-import {toastsReducer as toasts} from 'react-toasify-redux';
+import {toastsReducer as toasts} from 'react-toastify-redux';
 
 export default combineReducers({
     // ...other reducers
@@ -24,7 +24,7 @@ export default combineReducers({
 
 Include the toast controller in main view:
 ```javascript
-import {ToastController} from 'react-toasify-redux';
+import {ToastController} from 'react-toastify-redux';
 
 export default () => {
     return (
@@ -65,7 +65,7 @@ export default ({ header, message }) => (
 
 Include this component in ToastConroller
 ```javascript
-import {ToastController} from 'react-toasify-redux';
+import {ToastController} from 'react-toastify-redux';
 import CustomToastComponent from 'awesome-folder/custom-toast-component';
 
 export default () => {
