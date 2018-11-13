@@ -152,7 +152,7 @@ export interface DismissActionPayload {
  * Update action options
  */
 export interface UpdateActionOptions extends ToastBaseOptions {
-  message: any;
+  message?: any;
 }
 
 /**
