@@ -1,5 +1,5 @@
 import React from 'react';
-import {ToastType, ToastContainerProps as ReactToastContainerProps} from "react-toastify";
+import {ToastContainerProps as ReactToastContainerProps} from "react-toastify";
 import {ComponentClass, SFC} from "react";
 
 export interface ToastBaseOptions {
@@ -20,7 +20,7 @@ export interface ToastBaseOptions {
    * Set the toast type.
    * `One of: 'info', 'success', 'warning', 'error', 'default'`
    */
-  type?: ToastType;
+  type?: 'info' | 'success' | 'warning' | 'error' | 'default';
 
   /**
    * Pause the timer when the mouse hover the toast.
@@ -152,7 +152,7 @@ export interface DismissActionPayload {
  * Update action options
  */
 export interface UpdateActionOptions extends ToastBaseOptions {
-  message: any;
+  message?: any;
 }
 
 /**
