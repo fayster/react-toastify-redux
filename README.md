@@ -24,13 +24,13 @@ export default combineReducers({
 
 Include the toast controller in main view:
 ```javascript
-import {ToastController} from 'react-toastify-redux';
+import {ToastContainer} from 'react-toastify-redux';
 
 export default () => {
     return (
         <div>
             ...
-            <ToastController />
+            <ToastContainer />
         </div>
     );
 };
